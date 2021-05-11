@@ -73,7 +73,8 @@ import csv
 
 def produce_file(source, dir, number):
     with open(dir + '/source' + str(number) + '.csv', 'w', newline='') as wf:
-        data = source.read(random.randint(5, 15)).strip('\n')
+        # data = source.read(random.randint(5, 15)).strip('\n')
+        data = source.read(1).strip('\n')
         print(f'{len(data)=}')
         print(f'{data=}')
         wf.write(data)
@@ -84,7 +85,8 @@ def run_files():
     while True:
         produce_file(source, 'datasource', idx)
         idx += 1
-        wait_time = 1
+        # reduce time
+        wait_time = 2
         time.sleep(wait_time)
 
 if __name__ == '__main__':

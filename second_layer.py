@@ -43,21 +43,11 @@ for column, target in column_pairs:
 
 df.printSchema()
 
-query = df.withColumn('timestamp', F.unix_timestamp(F.col('date'), "yyyy-MM-dd").cast(stypes.TimestampType())) \
-    .withWatermark("timestamp", "1 minutes") \
-    .select('*').groupby(df.name, "timestamp").agg(
-    F.max(F.col('high') - F.col('low')).alias('max_range'),
-    F.sum(df.volume).alias('volume_sum'),
-    F.sum((F.col('open') - F.col('close')) / F.col('open') * 100).alias('delta_total_percents')
-)
-
-query = query.writeStream.format("delta").outputMode("append") \
-    .option("checkpointLocation", "checkpoints/etl-second-to-third") \
+query = df.writeStream.format("delta").outputMode("append") \
+    .option("checkpointLocation", "checkpoints/second-to-third") \
     .option("mergeSchema", "true") \
-    .start("delta/events_processed/")
+    .start("delta/clean/")
 
 print('query started')
 query.awaitTermination()
 print("success")
-
-
