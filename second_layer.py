@@ -20,6 +20,27 @@ schema = stypes.StructType().add('date', stypes.DateType()) \
 df = spark.readStream.format("delta").load("delta/events/")
 print(df)
 
+import pyspark
+import pyspark.ml.feature as spark_features
+
+column_pairs = [('open', F.col('close')),
+                ('high', F.col('low')),
+                ('low', F.col('high')),
+                ('close', F.col('open')),
+                ('volume', 0)
+                ]
+
+for column, target in column_pairs:
+    df = df.withColumn(
+        column,
+        F.when(
+            F.isnan(column) |
+            F.col(column).isNull() |
+            (F.col(column) == "NA") |
+            (F.col(column) == "NULL"),
+            target).otherwise(F.col(column)).cast(stypes.DoubleType()))
+
+
 df.printSchema()
 
 query = df.withColumn('timestamp', F.unix_timestamp(F.col('date'), "yyyy-MM-dd").cast(stypes.TimestampType())) \
