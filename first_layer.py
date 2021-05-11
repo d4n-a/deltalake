@@ -30,7 +30,7 @@ df.printSchema()
 print("write stream started")
 # or append?
 query = df.writeStream.format("delta").outputMode("append") \
-    .option("checkpointLocation", "checkpoints/etl-from-json") \
+    .option("checkpointLocation", "checkpoints/etl-from-csv") \
     .option("mergeSchema", "true") \
     .start("delta/events/")
 
