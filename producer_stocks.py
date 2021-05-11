@@ -69,18 +69,11 @@ class Source():
             print(f'{self.pos=}')
             return '\n'.join([','.join(row) for row in data])
 
-            # new_pos = self.pos + strings_amount
-            # data = rf.readlines()[self.pos:new_pos]
-            # self.pos = new_pos
-            # print(f'{self.pos=}')
-            # return ''.join(data)
-
 import csv
 
 def produce_file(source, dir, number):
     with open(dir + '/source' + str(number) + '.csv', 'w', newline='') as wf:
         data = source.read(random.randint(5, 15)).strip('\n')
-        # data = source.read(1).strip('\n')
         print(f'{len(data)=}')
         print(f'{data=}')
         wf.write(data)
