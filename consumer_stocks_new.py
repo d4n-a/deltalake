@@ -23,23 +23,13 @@ print("schema defined ")
 
 df = spark.readStream.option("host","localhost").option("port","9999") \
     .option('includeTimestamp', 'true').schema(schema).csv('datasource')
-    # .option('includeTimestamp', 'true').csv('datasource')
+# .option('includeTimestamp', 'true').csv('datasource')
 
 df.printSchema()
 
 print("write stream started")
-
-df.printSchema()
-
-query = df.withColumn('timestamp', F.unix_timestamp(F.col('date'), "yyyy-MM-dd").cast(stypes.TimestampType())) \
-    .withWatermark("timestamp", "1 minutes") \
-    .select('*').groupby(df.name, "timestamp").agg(
-    F.max(F.col('high') - F.col('low')).alias('max_range'),
-    F.sum(df.volume).alias('volume_sum'),
-    F.sum((F.col('open') - F.col('close')) / F.col('open') * 100).alias('delta_total_percents')
-)
-
-query = query.writeStream.format("delta").outputMode("append") \
+# or append?
+query = df.writeStream.format("delta").outputMode("append") \
     .option("checkpointLocation", "checkpoints/etl-from-json") \
     .option("mergeSchema", "true") \
     .start("delta/events/")
