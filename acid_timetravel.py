@@ -10,8 +10,10 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-fullHistoryDF = deltaTable.history()
+processed = DeltaTable.forPath(spark, "delta/processed/")
+
+processed_history = processed.history()
 
 print('delta history:')
-fullHistoryDF.show()
+processed_history.show()
 
