@@ -16,3 +16,8 @@ deltaTable.delete(F.abs(F.col("delta_total_percents")) > 2)   # predicate using 
 
 deltaTable.toDF().select('*').where(F.col("delta_total_percents") > 1.7).show()
 
+fullHistoryDF = deltaTable.history()
+
+print('delta history:')
+fullHistoryDF.show()
+
