@@ -16,7 +16,7 @@ schema = stypes.StructType().add('date', stypes.DateType()) \
     .add('low', stypes.FloatType()).add('close', stypes.FloatType()) \
     .add('volume', stypes.FloatType()).add('name', stypes.StringType())
 
-df = spark.readStream.format("delta").load("delta/processed/")
+df = spark.readStream.format("delta").load("delta/gold/")
 print(df)
 
 df.printSchema()

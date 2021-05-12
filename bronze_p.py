@@ -22,7 +22,7 @@ schema = stypes.StructType().add('date', stypes.DateType()) \
 print("schema defined ")
 
 df = spark.readStream.option("host","localhost").option("port","9999") \
-    .option('includeTimestamp', 'true').schema(schema).csv('datasource')
+    .option('includeTimestamp', 'true').schema(schema).csv('datastream')
 # .option('includeTimestamp', 'true').csv('datasource')
 
 df.printSchema()
@@ -32,7 +32,7 @@ print("write stream started")
 query = df.writeStream.format("delta").outputMode("append") \
     .option("checkpointLocation", "checkpoints/etl-from-csv") \
     .option("mergeSchema", "true") \
-    .start("delta/events/")
+    .start("delta/bronze/")
 
 print('query started')
 query.awaitTermination()

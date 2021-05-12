@@ -81,9 +81,9 @@ def produce_file(source, dir, number):
 
 def run_files():
     idx = 0
-    source = Source("all_stocks_5yr.csv")
+    source = Source("datasource/all_stocks_5yr.csv")
     while True:
-        produce_file(source, 'datasource', idx)
+        produce_file(source, 'datastream', idx)
         idx += 1
         # reduce time
         wait_time = 1

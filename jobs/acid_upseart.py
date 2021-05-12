@@ -11,7 +11,7 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-processed = DeltaTable.forPath(spark, "delta/processed/")
+gold = DeltaTable.forPath(spark, "delta/gold/")
 
 '''
 +----+-------------------+-------------------+-----------+--------------------+
@@ -21,11 +21,11 @@ processed = DeltaTable.forPath(spark, "delta/processed/")
 +----+-------------------+-------------------+-----------+--------------------+
 '''
 
-upseart_data = spark.read.format("csv").option("header", "true").load("upseart.csv")
+upseart_data = spark.read.format("csv").option("header", "true").load("../datasource/upseart.csv")
 
-processed.alias("processed").merge(
+gold.alias("gold").merge(
     upseart_data.alias("upseart"),
-    "processed.name = upseart.name") \
+    "gold.name = upseart.name") \
   .whenMatchedUpdate(set = { "delta_total_percents" : "upseart.delta_total_percents" } ) \
   .whenNotMatchedInsert(values =
     {
@@ -38,4 +38,4 @@ processed.alias("processed").merge(
   ) \
   .execute()
 
-processed.toDF().select('*').where(F.col("delta_total_percents") > 2).show()
+gold.toDF().select('*').where(F.col("delta_total_percents") > 2).show()

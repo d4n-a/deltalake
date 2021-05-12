@@ -15,5 +15,5 @@ if __name__ == '__main__':
         .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
         .getOrCreate()
 
-    processed = DeltaTable.forPath(spark, "delta/processed/")
-    show_df(processed.toDF(), 2)
+    gold = DeltaTable.forPath(spark, "delta/gold/")
+    show_df(gold.toDF(), 2)

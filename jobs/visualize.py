@@ -38,18 +38,18 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-processed = DeltaTable.forPath(spark, "delta/processed/")
-processed_df = processed.toDF()
+gold = DeltaTable.forPath(spark, "delta/gold/")
+gold_df = gold.toDF()
 
-print('processed_df:')
-processed_df.show()
+print('gold_df:')
+gold.show()
 
 import plotly.graph_objects as go
 import pandas as pd
 
 names = ['WYNN', 'BLL', 'IT', 'BA']
 for name in names:
-    plot_data = processed_df.select(F.col('timestamp'), F.col('delta_total_percents')).where(F.col('name') == name)
+    plot_data = gold_df.select(F.col('timestamp'), F.col('delta_total_percents')).where(F.col('name') == name)
     print(f'{name=}:')
     plot_data.show()
 

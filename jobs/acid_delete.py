@@ -10,9 +10,9 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-processed = DeltaTable.forPath(spark, "delta/processed/")
+gold = DeltaTable.forPath(spark, "../delta/gold/")
 
-processed.delete(F.abs(F.col("delta_total_percents")) > 2)   # predicate using Spark SQL functions
+gold.delete(F.abs(F.col("delta_total_percents")) > 2)   # predicate using Spark SQL functions
 
-processed.toDF().select('*').where(F.col("delta_total_percents") > 1.7).show()
+gold.toDF().select('*').where(F.col("delta_total_percents") > 1.7).show()
 

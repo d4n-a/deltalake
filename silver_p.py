@@ -17,7 +17,7 @@ schema = stypes.StructType().add('date', stypes.DateType()) \
     .add('low', stypes.FloatType()).add('close', stypes.FloatType()) \
     .add('volume', stypes.FloatType()).add('name', stypes.StringType())
 
-df = spark.readStream.format("delta").load("delta/events/")
+df = spark.readStream.format("delta").load("delta/bronze/")
 print(df)
 
 import pyspark
@@ -44,9 +44,9 @@ for column, target in column_pairs:
 df.printSchema()
 
 query = df.writeStream.format("delta").outputMode("append") \
-    .option("checkpointLocation", "checkpoints/second-to-third") \
+    .option("checkpointLocation", "checkpoints/bronze-to-silver") \
     .option("mergeSchema", "true") \
-    .start("delta/clean/")
+    .start("delta/silver/")
 
 print('query started')
 query.awaitTermination()

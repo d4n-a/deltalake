@@ -16,25 +16,24 @@ schema = stypes.StructType().add('date', stypes.DateType()) \
     .add('low', stypes.FloatType()).add('close', stypes.FloatType()) \
     .add('volume', stypes.FloatType()).add('name', stypes.StringType())
 
-df = spark.readStream.format("delta").load("delta/clean/")
-print(df)
+silver = spark.readStream.format("delta").load("delta/silver/")
 
-df.printSchema()
+silver.printSchema()
 
 import pyspark.sql.functions as F
 
-query = df.withColumn('timestamp', F.unix_timestamp(F.col('date'), "yyyy-MM-dd").cast(stypes.TimestampType())) \
+query = silver.withColumn('timestamp', F.unix_timestamp(F.col('date'), "yyyy-MM-dd").cast(stypes.TimestampType())) \
     .withWatermark("timestamp", "1 minutes") \
-    .select('*').groupby(df.name, "timestamp").agg(
+    .select('*').groupby(silver.name, "timestamp").agg(
     F.max(F.col('high') - F.col('low')).alias('max_range'),
-    F.sum(df.volume).alias('volume_sum'),
+    F.sum(silver.volume).alias('volume_sum'),
     F.sum((F.col('open') - F.col('close')) / F.col('open') * 100).alias('delta_total_percents')
 )
 
 query = query.writeStream.format("delta").outputMode("append") \
     .option("checkpointLocation", "checkpoints/etl-third-to-fourth") \
     .option("mergeSchema", "true") \
-    .start("delta/processed/")
+    .start("delta/gold/")
 
 print('query started')
 query.awaitTermination()
