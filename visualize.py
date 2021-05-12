@@ -44,3 +44,20 @@ processed_df = processed.toDF()
 print('processed_df:')
 processed_df.show()
 
+import plotly.graph_objects as go
+import pandas as pd
+
+names = ['WYNN', 'BLL', 'IT', 'BA']
+for name in names:
+    plot_data = processed_df.select(F.col('timestamp'), F.col('delta_total_percents')).where(F.col('name') == name)
+    print(f'{name=}:')
+    plot_data.show()
+
+    import plotly.express as px
+
+    fig = px.scatter(
+        plot_data.toPandas(), x='timestamp', y='delta_total_percents', opacity=0.65,
+        title=name,trendline='ols', trendline_color_override='darkblue'
+    )
+    fig.show()
+
