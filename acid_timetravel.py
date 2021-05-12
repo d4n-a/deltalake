@@ -11,9 +11,24 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .getOrCreate()
 
 processed = DeltaTable.forPath(spark, "delta/processed/")
-
 processed_history = processed.history()
-
 print('delta history:')
 processed_history.show()
+
+# version = int(input("please, provide version to travel to: "))
+version = 101
+print(f'{version=}')
+
+processed_timetravel = spark.read.format("delta").option("versionAsOf", version).load("delta/processed")
+
+print(f"Chosen {version=}")
+processed_history.select('*').where(F.col('version') == version).show()
+
+print(f"Data for that version:")
+processed_timetravel.show()
+
+print("DTP threshold 2 for that version:")
+from acid_read import show_df
+show_df(processed_timetravel, 2)
+
 
