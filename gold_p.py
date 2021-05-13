@@ -11,11 +11,6 @@ spark = pyspark.sql.SparkSession.builder.appName("MyApp") \
 
 from delta.tables import *
 
-schema = stypes.StructType().add('date', stypes.DateType()) \
-    .add('open', stypes.FloatType()).add('high', stypes.FloatType()) \
-    .add('low', stypes.FloatType()).add('close', stypes.FloatType()) \
-    .add('volume', stypes.FloatType()).add('name', stypes.StringType())
-
 silver = spark.readStream.format("delta").load("delta/silver/")
 
 silver.printSchema()

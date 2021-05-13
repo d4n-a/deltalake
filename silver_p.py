@@ -12,16 +12,7 @@ spark = pyspark.sql.SparkSession.builder.appName("MyApp") \
 from delta.tables import *
 import pyspark.sql.functions as F
 
-schema = stypes.StructType().add('date', stypes.DateType()) \
-    .add('open', stypes.FloatType()).add('high', stypes.FloatType()) \
-    .add('low', stypes.FloatType()).add('close', stypes.FloatType()) \
-    .add('volume', stypes.FloatType()).add('name', stypes.StringType())
-
 df = spark.readStream.format("delta").load("delta/bronze/")
-print(df)
-
-import pyspark
-import pyspark.ml.feature as spark_features
 
 column_pairs = [('open', F.col('close')),
                 ('high', F.col('low')),
