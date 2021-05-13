@@ -28,7 +28,7 @@ print(f"Data for that version:")
 gold_timetravel.show()
 
 print("DTP threshold 2 for that version:")
-from acid_read import show_df
+from read import show_df
 show_df(gold_timetravel, 2)
 
 
