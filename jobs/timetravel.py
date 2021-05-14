@@ -10,19 +10,19 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-gold = DeltaTable.forPath(spark, "delta/gold/")
+gold = DeltaTable.forPath(spark, "../delta/gold/")
 gold_history = gold.history()
 print('gold history:')
 gold_history.show()
 
 # version = int(input("please, provide version to travel to: "))
-version = 101
+version = 73
 print(f'{version=}')
 
-gold_timetravel = spark.read.format("delta").option("versionAsOf", version).load("delta/gold")
+gold_timetravel = spark.read.format("delta").option("versionAsOf", version).load("../delta/gold")
 
 print(f"Chosen {version=}")
-gold_timetravel.select('*').where(F.col('version') == version).show()
+gold_history.select('*').where(F.col('version') == version).show()
 
 print(f"Data for that version:")
 gold_timetravel.show()

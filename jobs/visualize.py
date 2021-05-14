@@ -38,11 +38,11 @@ spark = pyspark.sql.SparkSession.builder.master('spark://127.0.0.1:7077').appNam
     .config("spark.sql.streaming.forceDeleteTempCheckpointLocation", True) \
     .getOrCreate()
 
-gold = DeltaTable.forPath(spark, "delta/gold/")
+gold = DeltaTable.forPath(spark, "../delta/gold/")
 gold_df = gold.toDF()
 
 print('gold_df:')
-gold.show()
+gold_df.show()
 
 import plotly.graph_objects as go
 import pandas as pd
