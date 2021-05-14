@@ -20,7 +20,7 @@ class Source():
 
 def produce_file(source, dir, number):
     with open(dir + '/source' + str(number) + '.csv', 'w', newline='') as wf:
-        data = source.read(random.randint(5, 15)).strip('\n')
+        data = source.read(random.randint(30, 70)).strip('\n')
         # data = source.read(1).strip('\n')
         print(f'{len(data)=}')
         # print(f'{data=}')
