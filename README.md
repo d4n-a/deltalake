@@ -13,6 +13,9 @@ Designing the storage architecture is an essential part in big data solutions en
 * Timetravel on Gold layer;
 * Visualisation.
 
+### Architecture
+![](docs/architecture.png)
+
 ### Software
 * macOS BigSur Version 11.3.1 Darwin Kernel Version 20.4.0
 * ApacheSpark:spark-3.1.1-bin-hadoop3.2
@@ -27,4 +30,4 @@ Designing the storage architecture is an essential part in big data solutions en
 Historical stock data for all current S&P 500 companies
 
 ### Summary
-Delta Lake is a new chapter in the development of Big Data solutions. Combination of convenient DataFrame interface, storage organisation transparency, ACID-compatibility, batch-stream processing, metadata as DataFrame opens up opportunities for building extremely large, scalable and durable storages and Big Data processing systems in financial and other fields.
+Delta Lake is a new chapter in the development of Big Data solutions. Combination of convenient DataFrame interface, storage organisation transparency, ACID-compatibility, batch-stream processing, metadata as Big Data opens up opportunities for building extremely large, scalable and durable storages and Big Data processing systems in financial and other fields.
